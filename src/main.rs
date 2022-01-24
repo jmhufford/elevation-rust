@@ -1,4 +1,5 @@
 
+#[derive(Copy, Clone)]
 struct Hex {
     pub elevation: i8,
     pub occupied: bool,
@@ -62,11 +63,24 @@ fn move_elevation(from: Hex, to: Hex) -> (Hex, Hex, bool) {
     (from, to, false)
 }
 
+fn move_piece(from: Hex, to: Hex,) -> (Hex, Hex, bool) {
+    if from.occupied && !to.occupied && from.elevation == to.elevation && check_in_bounds(&from) && check_in_bounds(&to) {
+        return (
+            Hex { elevation: from.elevation, occupied: false, location_x: from.location_x, location_y: from.location_y },
+            Hex { elevation: to.elevation, occupied: true, location_x: to.location_x, location_y: to.location_y },
+            true,
+        )
+    }
+    (from, to, false)
+}
+
 fn main() {
     let board = make_board(7);
     let spot1 = Hex { elevation: 1, occupied: false, location_x: 6, location_y: 0 };
     let spot2 = Hex { elevation: 1, occupied: false, location_x: 4, location_y: 4 };
     let (spot3, spot4, success) = move_elevation(spot1, spot2);
+    let (spot5, spot6, success2) = move_piece(board[0][0], spot4);
     println!("{}", success);
+    println!("{}", success2);
     println!("Hello, world!");
 }
